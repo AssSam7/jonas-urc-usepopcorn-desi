@@ -53,6 +53,7 @@ const average = (arr) =>
 /* Structural Component */
 export default function App() {
   const [movies, setMovies] = useState(tempMovieData);
+  const [watched, setWatched] = useState(tempWatchedData);
 
   return (
     <>
@@ -62,10 +63,14 @@ export default function App() {
         <NumsResults movies={movies} />
       </NavBar>
       <Main>
-        <ListBox>
+        <Box>
           <MovieList movies={movies} />
-        </ListBox>
-        <WatchedBox />
+        </Box>
+
+        <Box>
+          <WatchedMoviesSummary watched={watched} />
+          <WatchedMovieList watched={watched} />
+        </Box>
       </Main>
     </>
   );
@@ -116,22 +121,43 @@ function Main({ children }) {
 }
 
 /* Stateful Component */
-function ListBox({ children }) {
-  const [isOpen1, setIsOpen1] = useState(true);
+function Box({ children }) {
+  const [isOpen, setIsOpen] = useState(true);
+
+  return (
+    <div className="box">
+      <button className="btn-toggle" onClick={() => setIsOpen((open) => !open)}>
+        {isOpen ? "–" : "+"}
+      </button>
+
+      {isOpen && children}
+    </div>
+  );
+}
+
+/* Stateful Component */
+/* function WatchedBox() {
+  const [watched, setWatched] = useState(tempWatchedData);
+
+  const [isOpen2, setIsOpen2] = useState(true);
 
   return (
     <div className="box">
       <button
         className="btn-toggle"
-        onClick={() => setIsOpen1((open) => !open)}
+        onClick={() => setIsOpen2((open) => !open)}
       >
-        {isOpen1 ? "–" : "+"}
+        {isOpen2 ? "–" : "+"}
       </button>
-
-      {isOpen1 && children}
+      {isOpen2 && (
+        <>
+          <WatchedMoviesSummary watched={watched} />
+          <WatchedMovieList watched={watched} />
+        </>
+      )}
     </div>
   );
-}
+} */
 
 /* Stateful Component */
 function MovieList({ movies }) {
@@ -157,30 +183,6 @@ function Movie({ movie }) {
         </p>
       </div>
     </li>
-  );
-}
-
-/* Stateful Component */
-function WatchedBox() {
-  const [watched, setWatched] = useState(tempWatchedData);
-
-  const [isOpen2, setIsOpen2] = useState(true);
-
-  return (
-    <div className="box">
-      <button
-        className="btn-toggle"
-        onClick={() => setIsOpen2((open) => !open)}
-      >
-        {isOpen2 ? "–" : "+"}
-      </button>
-      {isOpen2 && (
-        <>
-          <WatchedMoviesSummary watched={watched} />
-          <WatchedMovieList watched={watched} />
-        </>
-      )}
-    </div>
   );
 }
 
