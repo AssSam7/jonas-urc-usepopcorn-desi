@@ -50,25 +50,30 @@ const tempWatchedData = [
 const average = (arr) =>
   arr.reduce((acc, cur, i, arr) => acc + cur / arr.length, 0);
 
+/* Structural Component */
 export default function App() {
+  const [movies, setMovies] = useState(tempMovieData);
+
   return (
     <>
-      <NavBar />
-      <Main />
+      <NavBar movies={movies} />
+      <Main movies={movies} />
     </>
   );
 }
 
-function NavBar() {
+/* Structural Component */
+function NavBar({ movies }) {
   return (
     <nav className="nav-bar">
       <Logo />
       <Search />
-      <NumsList />
+      <NumsResults movies={movies} />
     </nav>
   );
 }
 
+/* Presentational Component */
 function Logo() {
   return (
     <div className="logo">
@@ -78,6 +83,7 @@ function Logo() {
   );
 }
 
+/* Stateful Component */
 function Search() {
   const [query, setQuery] = useState("");
 
@@ -92,24 +98,27 @@ function Search() {
   );
 }
 
-function NumsList() {
+/* Presentation Component */
+function NumsResults({ movies }) {
   return (
     <p className="num-results">
-      Found <strong>X</strong> results
+      Found <strong>{movies.length}</strong> results
     </p>
   );
 }
 
-function Main() {
+/* Structural Component */
+function Main({ movies }) {
   return (
     <main className="main">
-      <ListBox />
+      <ListBox movies={movies} />
       <WatchedBox />
     </main>
   );
 }
 
-function ListBox() {
+/* Stateful Component */
+function ListBox({ movies }) {
   const [isOpen1, setIsOpen1] = useState(true);
 
   return (
@@ -121,14 +130,13 @@ function ListBox() {
         {isOpen1 ? "–" : "+"}
       </button>
 
-      {isOpen1 && <MovieList />}
+      {isOpen1 && <MovieList movies={movies} />}
     </div>
   );
 }
 
-function MovieList() {
-  const [movies, setMovies] = useState(tempMovieData);
-
+/* Stateful Component */
+function MovieList({ movies }) {
   return (
     <ul className="list">
       {movies?.map((movie) => (
@@ -138,6 +146,7 @@ function MovieList() {
   );
 }
 
+/* Presentation Component */
 function Movie({ movie }) {
   return (
     <li>
@@ -153,6 +162,7 @@ function Movie({ movie }) {
   );
 }
 
+/* Stateful Component */
 function WatchedBox() {
   const [watched, setWatched] = useState(tempWatchedData);
 
@@ -176,6 +186,7 @@ function WatchedBox() {
   );
 }
 
+/* Presentational Component */
 function WatchedMoviesSummary({ watched }) {
   const avgImdbRating = average(watched.map((movie) => movie.imdbRating));
   const avgUserRating = average(watched.map((movie) => movie.userRating));
@@ -206,6 +217,7 @@ function WatchedMoviesSummary({ watched }) {
   );
 }
 
+/* Presentational Component */
 function WatchedMovieList({ watched }) {
   return (
     <ul className="list">
@@ -216,6 +228,7 @@ function WatchedMovieList({ watched }) {
   );
 }
 
+/* Presentational Component */
 function WatchedMovie({ movie }) {
   return (
     <li>
